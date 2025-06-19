@@ -63,6 +63,7 @@ flutter:
     - assets/images/camview1.png
     - assets/images/family tvdit.JPG
     - assets/images/getstarted.JPG
+    - assets/images/google_logo.png
     
 
   # An image asset can refer to one or more resolution-specific "variants", see

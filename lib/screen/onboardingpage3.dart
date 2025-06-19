@@ -12,8 +12,7 @@
     const Color highlight = Color(0xFFC7A1E8);
     const Color textPrimary  = Color(0xFFFFFFFF);
     const Color textSecondary = Color(0xFFFFB2B3B3);
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         body: Stack(
           children: [
             // Bottom black with diagonal top edge
@@ -126,8 +125,7 @@
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 }
 

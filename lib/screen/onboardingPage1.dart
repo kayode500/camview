@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:camview/screen/onboardingPage2.dart';
 
 class Onboardingpage1 extends StatelessWidget {
   const Onboardingpage1({super.key});
@@ -8,12 +9,11 @@ class Onboardingpage1 extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     const Color backgroundColor = Color(0xFF121212);
     const Color primary = Color(0xFF480F6A);
-     const Color primaryLight = Color(0xFF6A3C8A);
+    const Color primaryLight = Color(0xFF6A3C8A);
     const Color highlight = Color(0xFFC7A1E8);
     const Color textPrimary  = Color(0xFFFFFFFF);
     const Color textSecondary = Color(0xFFFFB2B3B3);
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         body: Stack(
           children: [
             // Bottom black with diagonal top edge
@@ -124,7 +124,10 @@ class Onboardingpage1 extends StatelessWidget {
                       width: 140,
                       child: ElevatedButton(
                         onPressed: () {
-                          // Handle button press
+                          Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const OnboardingPage2()),
+      );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: primaryLight,
@@ -154,8 +157,7 @@ class Onboardingpage1 extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 }
 

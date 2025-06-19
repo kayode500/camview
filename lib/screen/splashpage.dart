@@ -1,7 +1,25 @@
+import 'package:camview/screen/onboardingPage1.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
 
-class Splashpage extends StatelessWidget {
+class Splashpage extends StatefulWidget {
   const Splashpage({super.key});
+
+  @override
+  State<Splashpage> createState() => _SplashpageState();
+}
+
+class _SplashpageState extends State<Splashpage> {
+  @override
+  void initState() {
+    super.initState();
+    Timer(Duration(seconds: 3), () {
+      //navigate to onboarding page after 3 seconds
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>
+        const Onboardingpage1(),
+      ));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -11,8 +29,8 @@ class Splashpage extends StatelessWidget {
     const Color highlight = Color(0xFFC7A1E8);
     const Color textPrimary  = Color(0xFFFFFFFF);
     const Color textSecondary = Color(0xFFFFB2B3B3);
-    return MaterialApp(
-      home: Scaffold(
+    
+      return Scaffold(
         backgroundColor: backgroundColor,
         body: Center(
           child: Column(
@@ -34,8 +52,7 @@ class Splashpage extends StatelessWidget {
             ],
           )
         ),
-      ),
-    );
+      );
   }
 }
     
