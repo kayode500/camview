@@ -1,8 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:camview/authentication/loginpage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SignupPage extends StatefulWidget {
-  const SignupPage({super.key});
+  SignupPage({super.key});
 
   @override
   State<SignupPage> createState() => _SignupPageState();
@@ -12,13 +15,19 @@ class _SignupPageState extends State<SignupPage> {
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
 
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     const Color backgroundColor = Color(0xFF121212);
     const Color primary = Color(0xFF480F6A);
     const Color primaryLight = Color(0xFF6A3C8A);
     const Color textPrimary = Color(0xFFFFFFFF);
-    const Color textSecondary = Color(0xFFFFB2B3B3);
+    const Color textSecondary = Color(0xFFB2B3B3);
     const Color highlight = Color(0xFFC7A1E8);
 
     return Scaffold(
@@ -40,7 +49,7 @@ class _SignupPageState extends State<SignupPage> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                // Subtitle 
+                // Subtitle
                 const Text(
                   'create your account,and start streaming',
                   textAlign: TextAlign.center,
@@ -48,9 +57,9 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 const SizedBox(height: 24),
                 // Username
-                const TextField(
-                  style: TextStyle(color: textPrimary),
-                  decoration: InputDecoration(
+                TextField(
+                  controller: usernameController, // Username controller
+                  decoration: const InputDecoration(
                     labelText: 'Username',
                     labelStyle: TextStyle(color: textPrimary),
                     border: OutlineInputBorder(),
@@ -64,9 +73,10 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 const SizedBox(height: 16),
                 // Email
-                const TextField(
-                  style: TextStyle(color: textPrimary),
-                  decoration: InputDecoration(
+                TextField(
+                  style: const TextStyle(color: textPrimary),
+                  controller: emailController,
+                  decoration: const InputDecoration(
                     labelText: 'Email',
                     labelStyle: TextStyle(color: textPrimary),
                     border: OutlineInputBorder(),
@@ -84,6 +94,7 @@ class _SignupPageState extends State<SignupPage> {
                 TextField(
                   style: const TextStyle(color: textPrimary),
                   obscureText: _obscurePassword,
+                  controller: passwordController, // Password controller
                   decoration: InputDecoration(
                     labelText: 'Password',
                     labelStyle: const TextStyle(color: textPrimary),
@@ -114,6 +125,8 @@ class _SignupPageState extends State<SignupPage> {
                 TextField(
                   style: const TextStyle(color: textPrimary),
                   obscureText: _obscureConfirmPassword,
+                  controller:
+                      confirmPasswordController, // Confirm Password controller
                   decoration: InputDecoration(
                     labelText: 'Confirm Password',
                     labelStyle: const TextStyle(color: textPrimary),
@@ -144,8 +157,38 @@ class _SignupPageState extends State<SignupPage> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
-                      // Handle sign up logic
+                    onPressed: () async {
+                      // Only use Firebase for signup
+                      if (passwordController.text !=
+                          confirmPasswordController.text) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Passwords do not match'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                        return;
+                      }
+                      try {
+                        await FirebaseAuth.instance
+                            .createUserWithEmailAndPassword(
+                          email: emailController.text,
+                          password: passwordController.text,
+                        );
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LoginPage()),
+                        );
+                      } on FirebaseAuthException catch (e) {
+                        // Handle error
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(e.message ?? 'Error occurred'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: primary,
@@ -192,7 +235,7 @@ class _SignupPageState extends State<SignupPage> {
                       side: const BorderSide(color: textSecondary, width: 2),
                     ),
                     onPressed: () {
-                      // Handle Google sign up
+                      // Handle Google sign up (implement if needed)
                     },
                   ),
                 ),
@@ -208,7 +251,7 @@ class _SignupPageState extends State<SignupPage> {
                       side: const BorderSide(color: textSecondary, width: 2),
                     ),
                     onPressed: () {
-                      // Handle Apple sign up
+                      // Handle Apple sign up (implement if needed)
                     },
                   ),
                 ),
@@ -225,9 +268,10 @@ class _SignupPageState extends State<SignupPage> {
                       onPressed: () {
                         // Navigate to login page
                         Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const LoginPage()),
-    );
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LoginPage()),
+                        );
                       },
                       child: const Text(
                         "Login",

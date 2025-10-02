@@ -1,4 +1,6 @@
- import 'package:flutter/material.dart';
+ import 'package:camview/authentication/loginpage.dart';
+import 'package:camview/screen/home_page.dart';
+import 'package:flutter/material.dart';
 
  class OnboardingPage3 extends StatelessWidget {
   const OnboardingPage3({super.key});
@@ -96,6 +98,10 @@
                       width: 300,
                       child: ElevatedButton(
                                         onPressed:  () {
+                                          Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage()),
+      );
                       // Handle button press
                                         },
                                         style: ElevatedButton.styleFrom(
