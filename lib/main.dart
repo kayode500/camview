@@ -1,11 +1,12 @@
-
 import 'package:camview/authentication/loginpage.dart';
 import 'package:camview/screen/home_page.dart';
 import 'package:camview/screen/landing_page.dart';
-import 'package:camview/screen/profile_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:camview/screen/profile_page.dart';
+import 'package:camview/authentication/auth_wrapper.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,11 +35,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Camview',
-      initialRoute: '/landing',
+      // initialRoute: '/landing',
+      // home: const AuthWrapper(),
+      home:  AuthWrapper(),
       routes: {
-        '/landing': (context) => const LandingPage(),
-        '/login': (context) => const LoginPage(),
-         '/profile': (context) =>const  HomePage(), 
+        '/landing': (context) =>  LandingPage(),
+        '/login': (context) =>  LoginPage(),
+        '/profile': (context) =>  ProfilePage (),
       },
       debugShowCheckedModeBanner: false,
     );

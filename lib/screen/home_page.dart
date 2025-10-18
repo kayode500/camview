@@ -7,6 +7,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'movie_details_screen.dart';
 import '../model/movie.dart' as model;
 import 'package:camview/model/session.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'profile_page.dart';
 
 // SearchScreen widget moved to top-level for proper definition
 class SearchScreen extends StatefulWidget {
@@ -265,7 +268,6 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   int _randomMoviesPage = 1 + Random().nextInt(10);
 
-  // Replace these with your actual widgets/pages
   List<Widget> get _pages => [
         // Home tab: your current homepage content
         Builder(
@@ -629,7 +631,7 @@ class _HomePageState extends State<HomePage> {
           },
         ),
         // Profile tab
-        const ProfilePage(),
+        ProfilePage(),
       ];
 
   void _onItemTapped(int index) {
@@ -711,44 +713,51 @@ class _HomePageState extends State<HomePage> {
                     ? Colors.black
                     : Theme.of(context).colorScheme.primary,
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    radius: 36,
-                    backgroundColor: Colors.white24,
-                    child: Icon(Icons.person,
-                        size: 40,
-                        color: (isDark ||
-                                Theme.of(context).colorScheme.primary ==
-                                    Colors.deepPurple)
-                            ? Colors.white
-                            : Colors.white),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    currentUser?.userName ?? 'Guest',
-                    style: TextStyle(
-                      color: (isDark ||
-                              Theme.of(context).colorScheme.primary ==
-                                  Colors.deepPurple)
-                          ? Colors.white
-                          : Colors.white,
-                      fontSize: 20,
-                    ),
-                  ),
-                  Text(
-                    currentUser?.userEmail ?? '',
-                    style: TextStyle(
-                      color: (isDark ||
-                              Theme.of(context).colorScheme.primary ==
-                                  Colors.deepPurple)
-                          ? Colors.white
-                          : Colors.white,
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
+              child: StreamBuilder<User?>(
+                stream: FirebaseAuth.instance.authStateChanges(),
+                builder: (context, snap) {
+                  final fbUser = snap.data;
+                  final signedIn = fbUser != null;
+                  final sessionName = currentUser?.userName;
+                  // When signed in prefer session username, then firebase displayName,
+                  // then local part of email. Do NOT show literal "Guest" when signed in.
+                  final displayName = signedIn
+                      ? (sessionName ??
+                          fbUser?.displayName ??
+                          fbUser?.email?.split('@').first ??
+                          '')
+                      : (sessionName ?? 'Guest');
+                  final email = signedIn
+                      ? (fbUser?.email ?? '')
+                      : (currentUser?.userEmail ?? '');
+
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        radius: 36,
+                        backgroundColor: Colors.white24,
+                        child:
+                            Icon(Icons.person, size: 40, color: Colors.white),
+                      ),
+                      const SizedBox(height: 12),
+                      if (displayName.isNotEmpty)
+                        Text(
+                          displayName,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                          ),
+                        ),
+                      if (email.isNotEmpty)
+                        Text(
+                          email,
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 14),
+                        ),
+                    ],
+                  );
+                },
               ),
             ),
             ListTile(
@@ -796,7 +805,7 @@ class _HomePageState extends State<HomePage> {
                         'Camview is a modern movie streaming app crafted with care by Kayode, Owolabil, and Sarah.\n\n'
                         'Discover trending films, search by your favorite genres, and save movies you love.\n\n'
                         'Thank you for using Camview!',
-                        style: TextStyle(fontSize: 16, color: Colors.white),
+                        style: TextStyle(fontSize: 16, color: Colors.black),
                       ),
                     ),
                   ],
@@ -1613,95 +1622,6 @@ class FavoriteScreen extends StatelessWidget {
                   ],
                 );
               },
-            ),
-    );
-  }
-}
-
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
-
-  @override
-  State<ProfilePage> createState() => _ProfilePageState();
-}
-
-class _ProfilePageState extends State<ProfilePage> {
-  void _editName(BuildContext context) async {
-    final controller = TextEditingController(text: currentUser?.userName ?? '');
-    final result = await showDialog<String>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Edit Name'),
-        content: TextField(
-          controller: controller,
-          decoration: const InputDecoration(labelText: 'Name'),
-          autofocus: true,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context, controller.text.trim()),
-            child: const Text('Save'),
-          ),
-        ],
-      ),
-    );
-    if (result != null && result.isNotEmpty && currentUser != null) {
-      setState(() {
-        currentUser!.name = result;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final user = currentUser;
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        elevation: 0,
-        title: const Text('Profile', style: TextStyle(color: Colors.white)),
-        centerTitle: true,
-      ),
-      body: user == null
-          ? const Center(
-              child: Text('No user logged in',
-                  style: TextStyle(color: Colors.white)),
-            )
-          : Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    radius: 40,
-                    backgroundColor: Colors.white24,
-                    child:
-                        const Icon(Icons.person, size: 40, color: Colors.white),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    user.userName ?? '',
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    user.userEmail ?? '',
-                    style: const TextStyle(color: Colors.white70, fontSize: 16),
-                  ),
-                  const SizedBox(height: 24),
-                  ElevatedButton(
-                    onPressed: () => _editName(context),
-                    child: const Text('Edit Name'),
-                  ),
-                ],
-              ),
             ),
     );
   }

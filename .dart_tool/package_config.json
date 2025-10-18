@@ -14,6 +14,12 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "args",
+      "rootUri": "file:///C:/Users/KAYODE/AppData/Local/Pub/Cache/hosted/pub.dev/args-2.7.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
       "name": "async",
       "rootUri": "file:///C:/Users/KAYODE/AppData/Local/Pub/Cache/hosted/pub.dev/async-2.11.0",
       "packageUri": "lib/",
@@ -36,6 +42,12 @@
       "rootUri": "file:///C:/Users/KAYODE/AppData/Local/Pub/Cache/hosted/pub.dev/characters-1.3.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "chewie",
+      "rootUri": "file:///C:/Users/KAYODE/AppData/Local/Pub/Cache/hosted/pub.dev/chewie-1.10.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
     },
     {
       "name": "clock",
@@ -66,6 +78,12 @@
       "rootUri": "file:///C:/Users/KAYODE/AppData/Local/Pub/Cache/hosted/pub.dev/cupertino_icons-1.0.8",
       "packageUri": "lib/",
       "languageVersion": "3.1"
+    },
+    {
+      "name": "dbus",
+      "rootUri": "file:///C:/Users/KAYODE/AppData/Local/Pub/Cache/hosted/pub.dev/dbus-0.7.11",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
     },
     {
       "name": "fake_async",
@@ -260,6 +278,24 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "nested",
+      "rootUri": "file:///C:/Users/KAYODE/AppData/Local/Pub/Cache/hosted/pub.dev/nested-1.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "package_info_plus",
+      "rootUri": "file:///C:/Users/KAYODE/AppData/Local/Pub/Cache/hosted/pub.dev/package_info_plus-9.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "package_info_plus_platform_interface",
+      "rootUri": "file:///C:/Users/KAYODE/AppData/Local/Pub/Cache/hosted/pub.dev/package_info_plus_platform_interface-3.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "path",
       "rootUri": "file:///C:/Users/KAYODE/AppData/Local/Pub/Cache/hosted/pub.dev/path-1.9.0",
       "packageUri": "lib/",
@@ -288,6 +324,12 @@
       "rootUri": "file:///C:/Users/KAYODE/AppData/Local/Pub/Cache/hosted/pub.dev/posix-6.0.3",
       "packageUri": "lib/",
       "languageVersion": "3.0"
+    },
+    {
+      "name": "provider",
+      "rootUri": "file:///C:/Users/KAYODE/AppData/Local/Pub/Cache/hosted/pub.dev/provider-6.1.5+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "simple_sparse_list",
@@ -440,6 +482,18 @@
       "languageVersion": "3.3"
     },
     {
+      "name": "wakelock_plus",
+      "rootUri": "file:///C:/Users/KAYODE/AppData/Local/Pub/Cache/hosted/pub.dev/wakelock_plus-1.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "wakelock_plus_platform_interface",
+      "rootUri": "file:///C:/Users/KAYODE/AppData/Local/Pub/Cache/hosted/pub.dev/wakelock_plus_platform_interface-1.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
       "name": "web",
       "rootUri": "file:///C:/Users/KAYODE/AppData/Local/Pub/Cache/hosted/pub.dev/web-0.5.1",
       "packageUri": "lib/",
@@ -466,6 +520,12 @@
     {
       "name": "webview_flutter_wkwebview",
       "rootUri": "file:///C:/Users/KAYODE/AppData/Local/Pub/Cache/hosted/pub.dev/webview_flutter_wkwebview-3.22.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "win32",
+      "rootUri": "file:///C:/Users/KAYODE/AppData/Local/Pub/Cache/hosted/pub.dev/win32-5.10.1",
       "packageUri": "lib/",
       "languageVersion": "3.5"
     },
@@ -506,7 +566,7 @@
       "languageVersion": "3.5"
     }
   ],
-  "generated": "2025-07-26T21:33:06.699774Z",
+  "generated": "2025-10-17T19:26:03.849939Z",
   "generator": "pub",
   "generatorVersion": "3.5.4",
   "flutterRoot": "file:///C:/Dev/flutter",
