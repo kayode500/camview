@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "178560390316",
+    "firebase_url": "https://camview-9fbf1-default-rtdb.firebaseio.com",
+    "project_id": "camview-9fbf1",
+    "storage_bucket": "camview-9fbf1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:178560390316:android:42c5a5fb5d77bf86757b09",
+        "android_client_info": {
+          "package_name": "com.company.camview"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "178560390316-9bkijvn5qqc4c72jurbl55jpfbot1idv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZKdqtT3lBMqvTY79dO_TOUI3R33ZRVQM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "178560390316-9bkijvn5qqc4c72jurbl55jpfbot1idv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:178560390316:android:a2013e73e2991e0e757b09",
+        "android_client_info": {
+          "package_name": "com.kayode.camview"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "178560390316-9bkijvn5qqc4c72jurbl55jpfbot1idv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZKdqtT3lBMqvTY79dO_TOUI3R33ZRVQM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "178560390316-9bkijvn5qqc4c72jurbl55jpfbot1idv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

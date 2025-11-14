@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-camview-dev-6251d-authRole",
+      "UnauthRoleArn": "arn:aws:iam::996502029419:role/amplify-camview-dev-6251d-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::996502029419:role/amplify-camview-dev-6251d-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-camview-dev-6251d-deployment",
+      "UnauthRoleName": "amplify-camview-dev-6251d-unauthRole",
+      "StackName": "amplify-camview-dev-6251d",
+      "StackId": "arn:aws:cloudformation:us-east-1:996502029419:stack/amplify-camview-dev-6251d/aa0d3530-bf95-11f0-b389-0afffa8444ef",
+      "AmplifyAppId": "d2t84xbtw9umj8"
+    },
+    "categories": {
+      "auth": {
+        "camview2f5eaae9": {}
+      }
+    }
+  }
+}

@@ -7,9 +7,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'movie_details_screen.dart';
 import '../model/movie.dart' as model;
 import 'package:camview/model/session.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
 import 'profile_page.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 
 // SearchScreen widget moved to top-level for proper definition
 class SearchScreen extends StatefulWidget {
@@ -260,13 +260,40 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _fadeController;
+  late Animation<double> _fadeAnimation;
+
   bool isDarkMode = false;
   bool showSearchInput = false;
   final TextEditingController _searchController = TextEditingController();
   List<model.Movie> favoriteMovies = [];
   int _selectedIndex = 0;
   int _randomMoviesPage = 1 + Random().nextInt(10);
+
+  @override
+  void initState() {
+    super.initState();
+
+    _fadeController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
+    _fadeAnimation = CurvedAnimation(
+      parent: _fadeController,
+      curve: Curves.easeOut,
+    );
+
+    // start the fade animation
+    _fadeController.forward();
+  }
+
+  @override
+  void dispose() {
+    _fadeController.dispose();
+    super.dispose();
+  }
 
   List<Widget> get _pages => [
         // Home tab: your current homepage content
@@ -713,43 +740,77 @@ class _HomePageState extends State<HomePage> {
                     ? Colors.black
                     : Theme.of(context).colorScheme.primary,
               ),
-              child: StreamBuilder<User?>(
-                stream: FirebaseAuth.instance.authStateChanges(),
+              child: StreamBuilder<Map<String, String>>(
+                stream: Stream.multi((controller) async {
+                  Future<Map<String, String>> _fetch() async {
+                    try {
+                      final user = await Amplify.Auth.getCurrentUser();
+                      String name = user.username;
+                      String email = '';
+
+                      try {
+                        final attrs = await Amplify.Auth.fetchUserAttributes();
+                        for (var attr in attrs) {
+                          final key = attr.userAttributeKey.key;
+                          if (key == 'name' ||
+                              key == 'preferred_username' ||
+                              key == 'nickname') {
+                            name = attr.value;
+                          } else if (key == 'email') {
+                            email = attr.value;
+                          }
+                        }
+                      } catch (e) {
+                        safePrint('Could not fetch attributes: $e');
+                      }
+
+                      return {'name': name, 'email': email};
+                    } on AuthException catch (e) {
+                      safePrint('Auth error: ${e.message}');
+                      return {'name': 'Guest', 'email': ''};
+                    } catch (e) {
+                      safePrint('Unexpected error fetching user: $e');
+                      return {'name': 'Guest', 'email': ''};
+                    }
+                  }
+
+                  controller.add(await _fetch());
+
+                  Amplify.Hub.listen(HubChannel.Auth, (hubEvent) async {
+                    controller.add(await _fetch());
+                  });
+                }),
                 builder: (context, snap) {
-                  final fbUser = snap.data;
-                  final signedIn = fbUser != null;
-                  final sessionName = currentUser?.userName;
-                  // When signed in prefer session username, then firebase displayName,
-                  // then local part of email. Do NOT show literal "Guest" when signed in.
-                  final displayName = signedIn
-                      ? (sessionName ??
-                          fbUser?.displayName ??
-                          fbUser?.email?.split('@').first ??
-                          '')
-                      : (sessionName ?? 'Guest');
-                  final email = signedIn
-                      ? (fbUser?.email ?? '')
-                      : (currentUser?.userEmail ?? '');
+                  final loading =
+                      snap.connectionState == ConnectionState.waiting;
+                  final data = snap.data ?? {};
+                  final displayName = data['name'] ?? '';
+                  final email = data['email'] ?? '';
 
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      CircleAvatar(
+                      const CircleAvatar(
                         radius: 36,
                         backgroundColor: Colors.white24,
                         child:
                             Icon(Icons.person, size: 40, color: Colors.white),
                       ),
                       const SizedBox(height: 12),
-                      if (displayName.isNotEmpty)
+                      if (loading)
+                        const SizedBox(
+                          height: 18,
+                          width: 18,
+                          child: CircularProgressIndicator(
+                              color: Colors.white, strokeWidth: 2),
+                        ),
+                      if (!loading && displayName.isNotEmpty)
                         Text(
                           displayName,
                           style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                          ),
+                              color: Colors.white, fontSize: 20),
                         ),
-                      if (email.isNotEmpty)
+                      if (!loading && email.isNotEmpty)
                         Text(
                           email,
                           style: const TextStyle(
@@ -802,7 +863,7 @@ class _HomePageState extends State<HomePage> {
                     Padding(
                       padding: const EdgeInsets.only(top: 16.0),
                       child: Text(
-                        'Camview is a modern movie streaming app crafted with care by Kayode, Owolabil, and Sarah.\n\n'
+                        'Camview is a modern movie streaming app crafted with care by Kayode iyanu falana\n\n'
                         'Discover trending films, search by your favorite genres, and save movies you love.\n\n'
                         'Thank you for using Camview!',
                         style: TextStyle(fontSize: 16, color: Colors.black),
@@ -910,7 +971,10 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: _pages[_selectedIndex],
+      body: FadeTransition(
+        opacity: _fadeAnimation,
+        child: _pages[_selectedIndex],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor:
             isDark ? Colors.black : Theme.of(context).colorScheme.primary,
